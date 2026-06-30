@@ -61,10 +61,10 @@ export async function fetchGit(cwd: string): Promise<GitInfo | null> {
 
 /** Current date/time with timezone, unambiguous for a model. */
 export function renderClock(): string {
-	return `Time: ${new Date().toLocaleString("en-US", {
+	return new Date().toLocaleString("en-US", {
 		dateStyle: "full",
 		timeStyle: "long",
-	})}`;
+	});
 }
 
 /** Context budget from pi's live usage estimate. */
@@ -73,10 +73,10 @@ export function renderBudget(ctx: ExtensionContext): string | null {
 	if (!usage) return null;
 
 	if (usage.tokens != null && usage.percent != null) {
-		return `Context: ${usage.tokens.toLocaleString()} / ${usage.contextWindow.toLocaleString()} tokens (${usage.percent.toFixed(1)}%)`;
+		return `${usage.tokens.toLocaleString()} / ${usage.contextWindow.toLocaleString()} tokens (${usage.percent.toFixed(1)}%)`;
 	}
 	// tokens unknown (e.g. right after compaction, before next response)
-	return `Context window: ${usage.contextWindow.toLocaleString()} tokens`;
+	return `${usage.contextWindow.toLocaleString()} tokens`;
 }
 
 /** Git branch + working-tree change count. */
@@ -86,7 +86,7 @@ export function renderGit(git: GitInfo | null): string | null {
 		git.dirty > 0
 			? `· ${git.dirty} change${git.dirty === 1 ? "" : "s"}`
 			: "(clean)";
-	return `Git: ${git.branch} ${state}`;
+	return `${git.branch} ${state}`;
 }
 
 /** Working directory, with $HOME collapsed to ~ for readability. */
@@ -96,5 +96,5 @@ export function renderCwd(cwd: string): string {
 	if (home && (cwd === home || cwd.startsWith(`${home}/`))) {
 		display = `~${cwd.slice(home.length)}`;
 	}
-	return `CWD: ${display}`;
+	return display;
 }
